@@ -1,0 +1,51 @@
+import random
+import sys
+maxpos=100
+ladders={9:21,13:36,27:49,33:78,55:69,71:92}
+hurdles={99:1,91:14,82:68,73:56,51:29,39:7,29:2,14:6}
+oldposition=0
+currentposition=0
+def players():
+    player1=input('Enter player1 name:')
+    player2=input('Enter player2 name:')
+    return player1,player2
+def roll_dice(playername):
+    print(playername,' roll the dice')
+    input1=input('Hit the Enter to roll the dice')
+    return random.randint(1,6)
+def snake_ladders(playername,currentposition,dice):
+    oldposition=currentposition
+    currentposition = currentposition+dice
+    if currentposition in ladders:
+        print(playername,' moved from' + str(currentposition) + 'to' +str(ladders[currentposition]))
+        currentposition=ladders[currentposition]
+        return currentposition,oldposition
+    if currentposition in hurdles:
+        print(playername,' moved from' + str(currentposition) + 'to' +str(hurdles[currentposition]))
+        currentposition=hurdles[currentposition]
+        return currentposition,oldposition
+    print(playername,' moved from' + str(oldposition) + 'to' +str(currentposition))
+    return currentposition,oldposition
+def checkwin(playername,currentposition,oldposition):
+    if currentposition > maxpos:
+        print('oops you need a number', maxpos-oldposition, 'to win')
+        currentposition=oldposition
+        return currentposition
+    if currentposition==100:
+        print('congratulations')
+        print('wow'+playername +'won the game')
+        sys.exit(1)
+    return currentposition
+def start():
+    s1,s2=0,0
+    player1name,player2name=players()
+    while True:
+        dice=roll_dice('player1name')
+        print('It"s a',dice)
+        s1,s11=snake_ladders(player1name,s1,dice)
+        s1=checkwin(player1name,s1,s11)
+        dice=roll_dice('player2name')
+        print('It"s a',dice)
+        s2,s22=snake_ladders(player2name,s2,dice)
+        s2=checkwin(player2name,s2,s22)
+start()
